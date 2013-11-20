@@ -9,9 +9,9 @@ void scrub_password(char *password) {
 	memset(password, '0', strlen(password));
 }
 
-long error() {
+long error(const char *message) {
 
-	printf("Error.");
+	printf("Error: %s\n", message);
 	exit(1);
 }
 
@@ -35,10 +35,10 @@ int main(int argc, char *argv[]) {
 			switch(argv[i][1]) {
 
 			case 'p':
-				port = ++i < argc ? atoi(argv[i]) : error();
+				port = ++i < argc ? atoi(argv[i]) : error("Not enough arguments.");
 				continue;
 			case 'a':
-				password = ++i < argc ? argv[i] : (char*)error();
+				password = ++i < argc ? argv[i] : (char*)error("Not enough arguments.");
 				continue;
 			case 'n':
 				new_circuit = 1;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
 			}
 
 		} else {
-			error();
+			error("Error unrecognised option.");
 		}
 
 	}
@@ -89,7 +89,9 @@ int main(int argc, char *argv[]) {
 
 			char togo[17+41+2];
 
+
 			//This requires UseMicrodescriptors 0 in torrc
+			//TODO this does not need to be in the loop body.
 			strncpy(togo, "getinfo desc/id/", 16);
 			strncpy(togo+16, ids[i], 41);
 			togo[16+41] = '\n';
@@ -99,8 +101,10 @@ int main(int argc, char *argv[]) {
 			my_recv(s, buf);
 
 			char *ip = parse_ip(buf);
-			printf("%s\n", ip);
-			free(ip);
+			if (ip) { 
+				printf("%s\n", ip);
+				free(ip);
+			}
 			free(ids[i]);
 		}
 

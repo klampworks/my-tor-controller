@@ -109,16 +109,18 @@ int check_250(const char *message) {
 char** parse_ids(const char *buf, int *num) {
 
 	//Having more than 3 or 4 entry guards is just plain dumb.
-	char **ids = malloc(4 * sizeof(char*));
+	int max = 4;
+	char **ids = malloc(max * sizeof(char*));
 
 	int count = 0;
 
 	for (const char *st = buf; (st = strchr(st, '$')); count++) {
 
 		//If some Einstein has set more than 3 entry guards...
-		if (count > 4) {
+		if (count > max) {
 
-			ids = realloc(*ids, sizeof(char*));
+			max *= 2;
+			ids = realloc(ids, max * sizeof(char*));
 			//if (!*ids) exit(1);
 		}
 
@@ -139,9 +141,12 @@ char* parse_ip(const char *buf) {
 	char *st = strchr(buf, '\n'),
 	    *en = strchr(st+1, '\n');
 
-	st = strchr(st, ' ');
-	st = strchr(st+1, ' ') + 1;
-	en = strchr(st, ' ');
+	if (!st) return '\0';
+	if (!en) return '\0';
+	
+	st = strchr(st, ' ');		if (!st) return '\0';
+	st = strchr(st+1, ' ') + 1;	if (!st) return '\0';
+	en = strchr(st, ' ');		if (!en) return '\0';
 	char *ip_line = malloc((en - st + 1) * sizeof *ip_line);
 	strncpy(ip_line, st, en - st);
 	ip_line[en-st] = '\0';

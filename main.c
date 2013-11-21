@@ -15,6 +15,14 @@ long error(const char *message) {
 	exit(1);
 }
 
+struct or_info {
+
+	char *name;
+	char id[42];
+	char *country;
+	char *ip;
+};
+
 int main(int argc, char *argv[]) {
 
 	if (argc < 3) {
@@ -26,7 +34,7 @@ int main(int argc, char *argv[]) {
 
 	short port = -1;
 	char *password = NULL;
-	int new_circuit = 0, dump_entry = 0;
+	int new_circuit = 0, dump_entry = 0, dump_exit = 0;
 
 	for (int i = 1; i < argc; i++) {
 		
@@ -45,6 +53,9 @@ int main(int argc, char *argv[]) {
 				continue;
 			case 'd':
 				dump_entry = 1;
+				continue;
+			case 'x':
+				dump_exit = 1;
 				continue;
 			}
 
@@ -83,6 +94,7 @@ int main(int argc, char *argv[]) {
 		my_recv(s, buf);
 
 		int num = 0;
+
 		char **ids = parse_ids(buf, &num);
 
 		char togo[17+41+2];
@@ -109,5 +121,36 @@ int main(int argc, char *argv[]) {
 
 
 	}
+
+	//TODO reused code.
+	if (dump_exit) {
+
+		my_send(s, "getinfo circuit-status\n");
+		my_recv(s, buf);
+
+		//puts(buf);
+
+		char *i = buf;
+		char *tmp = i;
+
+		for (;;) {
+
+			if (!(tmp = strchr(tmp, '$'))) 
+				break;
+
+			char id[42];
+			strncpy(id, tmp, 41);
+			id[41] = '\0';
+
+			puts(id);
+			i = ++tmp;
+			continue;
+
+			//TODO: fix this.
+		}
+
+	}
+
 	return 0;
+
 }

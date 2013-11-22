@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "comm.h"
 #include <stdlib.h>
+#include <alloca.h>
 
 #define MAXDATASIZE 1024
 
@@ -22,6 +23,20 @@ struct or_info {
 	char *country;
 	char *ip;
 };
+
+struct circuit {
+	struct or_info *or;
+	struct circuit *next;
+};
+
+char * find_2(const char* t, char s1, char s2) {
+
+	char *st1 = NULL, *st2 = NULL;
+	if (((st1 = strchr(t, s1)) && (st2 = strchr(t, s2)))) 
+		return st1 < st2? st1 : st2;
+	else
+		return st1? st1 : st2? st2 : NULL;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -128,16 +143,76 @@ int main(int argc, char *argv[]) {
 		my_send(s, "getinfo circuit-status\n");
 		my_recv(s, buf);
 
-		//puts(buf);
 
 		char *i = buf;
 		char *tmp = i;
 
+		struct circuit *cir = NULL;
+		
+
 		for (;;) {
 
+			char *lf = strchr(tmp, '\n');
+
+			if (!lf)
+				break;
+
+			unsigned size = lf - tmp;
+			char *line = alloca(size);
+			strncpy(line, tmp, size-1);
+			line[size-1] = '\0';
+
+			char *id[] = {NULL, NULL, NULL}, *name[] = {NULL, NULL, NULL};
+			for (unsigned i = 0; i < 3; i++) {
+				id[i] = NULL;
+				name[i] = NULL;
+			}
+
+			char *t = line;
+
+			for (unsigned i = 0; i < 3; i++) {
+				
+				if ((t = strchr(t, '$'))) {
+					id[i] = malloc(42);
+					strncpy(id[i], t, 41);
+					id[i][41] = '\0';
+				} else {
+					break;
+				}
+
+				char *tt = find_2(t, '=', '~');
+				if (!tt) break;
+
+				char *end = find_2(tt, ' ', ',');
+				if (!end) break;
+					
+				tt++;
+				unsigned size = end - tt;
+				name[i] = alloca(size);
+				strncpy(name[i], tt, size);
+				name[i][size] = '\0';;
+				t = end + 1;
+			}
+
+			for (unsigned i = 0; i < 3; i++) {
+			
+				if (id[i] && name[i]) {
+					printf("Id = %s and name = %s\n", id[i], name[i]);
+				}
+
+			}
+
+			puts("");
+			tmp = lf+1;
+			continue;
+
+			/*
 			if (!(tmp = strchr(tmp, '$'))) 
 				break;
 
+			if (lf < tmp)
+				printf("\n\n");
+	
 			char id[42];
 			strncpy(id, tmp, 41);
 			id[41] = '\0';
@@ -145,12 +220,9 @@ int main(int argc, char *argv[]) {
 			puts(id);
 			i = ++tmp;
 			continue;
-
-			//TODO: fix this.
+			*/
 		}
-
 	}
 
 	return 0;
-
 }

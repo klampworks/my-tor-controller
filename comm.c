@@ -104,7 +104,8 @@ int check_250(const char *message) {
 
 	YY_BUFFER_STATE i = yy_scan_string(message);
 	int code;
-	char **text = malloc(sizeof(char*));
+	char **text;
+	text = malloc(sizeof(char*));
 
 	yyparse(&code, text);
 	yy_delete_buffer(i);

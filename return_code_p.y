@@ -14,7 +14,7 @@
 %token <sval> RETURN_TEXT;
 %token EOL
 
-%parse-param {int *test}
+%parse-param {int *return_code} {char *return_text}
 
 %%
 
@@ -22,15 +22,14 @@ error_code:
 	two_fifty_ok | other_error
 
 two_fifty_ok:
-	RETURN_250 RETURN_OK EOL{ /*return 250 ok*/ }
+	RETURN_250 RETURN_OK EOL{ *return_code = 205; *return_text = NULL; }
 
 other_error:
-	RETURN_CODE RETURN_TEXT EOL { /*return some error*/ }
+	RETURN_CODE RETURN_TEXT EOL { *return_code = $1; *return_text = $2 }
 
 %%
 
 void yyerror(const char *s) {
-
 	printf("Email me teh errors %s\n", s);
 }
 

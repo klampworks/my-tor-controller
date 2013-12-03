@@ -28,7 +28,7 @@ other_error:
 
 %%
 
-void yyerror(const char *s) {
-	printf("Email me teh errors %s\n", s);
+void yyerror(const char *s, int *return_code, char **return_text) {
+	//printf("Email me teh errors %s\n", s);
 }
 

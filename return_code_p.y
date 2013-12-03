@@ -1,6 +1,5 @@
 %{
 #include <stdio.h>
-
 %}
 
 %union {
@@ -14,8 +13,8 @@
 %token <sval> RETURN_TEXT;
 %token EOL
 
-%parse-param {int *return_code} {char *return_text}
-
+%parse-param {int *return_code} 
+%parse-param {char *return_text}
 %%
 
 error_code:

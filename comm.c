@@ -97,12 +97,37 @@ int create_socket(const char *address, const short port) {
 	return s;
 }
 
+#include "return_code_p_lexer.h"
+#include "return_code_p.tab.h"
 //Check for the 250 OK message.
 int check_250(const char *message) {
 
+	YY_BUFFER_STATE i = yy_scan_string(message);
+	int code;
+	char **text = malloc(sizeof(char*));
+
+	yyparse(&code, text);
+	yy_delete_buffer(i);
+
+	puts("here");
+	if (code == 250) {
+
+		//*text is not allocated with code i 250.
+		free(text);
+		return 1;
+	} else {
+
+		printf("Error %d %s\n", code, *text);
+		free(*text);
+		free(text);
+		return 0;
+	}
+
+/*
 	static const char *ok = "250 OK\r\n";
 
 	return !strcmp(ok, message);
+*/
 }
 
 

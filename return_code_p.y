@@ -1,5 +1,8 @@
 %{
 #include <stdio.h>
+void yyerror(int *, char **, const char*);
+#include "return_code_p_lexer.h"
+int yyparse(int *, char **);
 %}
 
 %union {
@@ -8,7 +11,7 @@
 }
 
 %token RETURN_250;
-%token RETURN_OK;;
+%token RETURN_OK;
 %token <ival> RETURN_CODE;
 %token <sval> RETURN_TEXT;
 %token EOL
@@ -18,17 +21,17 @@
 %%
 
 error_code:
-	two_fifty_ok | other_error
+	other_error | two_fifty_ok ;
 
 two_fifty_ok:
-	RETURN_250 RETURN_OK EOL{ *return_code = 250; *return_text = NULL; }
+	RETURN_250 RETURN_OK EOL { *return_code = 250; *return_text = NULL; }
 
 other_error:
-	RETURN_CODE RETURN_TEXT EOL { *return_code = $1; **return_text = $2 }
+	RETURN_CODE RETURN_TEXT EOL { *return_code = $1; *return_text = $2; }
 
 %%
 
-void yyerror(const char *s, int *return_code, char **return_text) {
-	//printf("Email me teh errors %s\n", s);
+void yyerror(int *return_code, char **return_text, const char *s) {
+	printf("EEmail me teh errors %s\n", s);
 }
 

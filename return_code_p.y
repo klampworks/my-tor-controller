@@ -1,7 +1,8 @@
 %{
 #include <stdio.h>
-void yyerror(int *, char **, const char*);
 #include "return_code_p_lexer.h"
+
+void yyerror(int*, char**, const char*);
 int yyparse(int *, char **);
 %}
 
@@ -32,6 +33,6 @@ other_error:
 %%
 
 void yyerror(int *return_code, char **return_text, const char *s) {
-	printf("EEmail me teh errors %s\n", s);
+	printf("Email me teh errors %s\n", s);
 }
 

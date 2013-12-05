@@ -1,15 +1,11 @@
 %{
 #include <stdio.h>
+#include "comm.h"
 //#include "return_code_p_lexer.h"
 
 void yyerror(struct node **start, const char*);
 int yyparse(struct node **start);
 
-struct node {
-	char *id;
-	char *name;
-	struct *node child;
-};
 %}
 
 %union {
@@ -18,13 +14,12 @@ struct node {
 
 %token <sval> ID;
 %token <sval> NAME;
-%token EOL
 
 %parse-param {struct node **head}
 %%
 
 entry_guard:
-	ID NAME;
+	ID NAME { insert($1, $2); }
 
 %%
 

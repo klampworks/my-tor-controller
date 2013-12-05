@@ -10,4 +10,9 @@
 	char* parse_ip(const char*);
 	char** parse_ids(const char *buf, int *num);
 
+	struct node {
+		char *id;
+		char *name;
+		struct *node child;
+	};
 #endif

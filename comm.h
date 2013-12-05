@@ -13,6 +13,6 @@
 	struct node {
 		char *id;
 		char *name;
-		struct *node child;
+		struct node *child;
 	};
 #endif

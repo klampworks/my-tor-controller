@@ -103,14 +103,13 @@ int create_socket(const char *address, const short port) {
 int check_250(const char *message) {
 
 	YY_BUFFER_STATE i = yy_scan_string(message);
-	int code;
+	int code = 0;
 	char **text;
 	text = malloc(sizeof(char*));
 
 	yyparse(&code, text);
 	yy_delete_buffer(i);
 
-	puts("here");
 	if (code == 250) {
 
 		//*text is not allocated with code i 250.
@@ -131,7 +130,24 @@ int check_250(const char *message) {
 */
 }
 
+#include "return_code_p_lexer.h"
+#include "return_code_p.tab.h"
+#include "comm.h"
 
+int parse_entry_guards(const char *message) {
+
+	YY_BUFFER_STATE i = yy_scan_string(message);
+	struct node **head = malloc(sizeof(struct node*));
+	*head = NULL;
+	yyparse(head);
+	yy_delete_buffer(i);
+
+	/* Assuming a none empty list. */
+	for (struct node *i = *head; i; i = i->child) {
+		printf("%s --> %s\n", i->id, i->name);
+	}
+
+}
 char** parse_ids(const char *buf, int *num) {
 
 	//Having more than 3 or 4 entry guards is just plain dumb.

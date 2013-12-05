@@ -1,10 +1,11 @@
 %{
 #include <stdio.h>
 #include "comm.h"
-//#include "return_code_p_lexer.h"
+#include "entry_guard_lexer.h"
 
 void yyerror(struct node **start, const char*);
-int yyparse(struct node **start);
+int yyparse(struct node **head);
+void insert(struct node **, char *, char *);
 
 %}
 
@@ -19,15 +20,15 @@ int yyparse(struct node **start);
 %%
 
 entry_guard:
-	ID NAME { insert($1, $2); }
+	ID NAME { insert(head, $1, $2); }
 
 %%
 
-void insert(char *id, char *name) {
+void insert(struct node **head, char *id, char *name) {
 
 	struct node *i;
 
-	struct node *to_insert = malloc(sizeof node);
+	struct node *to_insert = malloc(sizeof to_insert);
 	to_insert->id = id;
 	to_insert->name = name;
 	to_insert->child = NULL;
@@ -45,7 +46,7 @@ void insert(char *id, char *name) {
 	}
 }
 
-void yyerror(char **id, char **name, const char *s) {
+void yyerror(struct node **head, const char *s) {
 	printf("Email me teh errors %s\n", s);
 }
 

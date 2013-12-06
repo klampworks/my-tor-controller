@@ -130,17 +130,17 @@ int check_250(const char *message) {
 */
 }
 
-#include "return_code_p_lexer.h"
-#include "return_code_p.tab.h"
+#include "entry_guard_lexer.h"
+#include "entry_guard.tab.h"
 #include "comm.h"
 
 int parse_entry_guards(const char *message) {
 
-	YY_BUFFER_STATE i = yy_scan_string(message);
+	YY_BUFFER_STATE i = ent_scan_string(message);
 	struct node **head = malloc(sizeof(struct node*));
 	*head = NULL;
 	entparse(head);
-	yy_delete_buffer(i);
+	ent_delete_buffer(i);
 
 	/* Assuming a none empty list. */
 	for (struct node *i = *head; i; i = i->child) {

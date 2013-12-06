@@ -139,7 +139,7 @@ int parse_entry_guards(const char *message) {
 	YY_BUFFER_STATE i = yy_scan_string(message);
 	struct node **head = malloc(sizeof(struct node*));
 	*head = NULL;
-	yyparse(head);
+	entparse(head);
 	yy_delete_buffer(i);
 
 	/* Assuming a none empty list. */

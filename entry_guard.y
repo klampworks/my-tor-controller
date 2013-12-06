@@ -16,15 +16,16 @@ entdebug = 1;
 
 %token <sval> ID;
 %token <sval> NAME;
-%token END EQUALS;
+%token END EQUALS LF;
 
 %parse-param {struct node **head}
 %%
 
-start:
-	entry_guard
+circuit:
+	entry_guard | circuit entry_guard | END;
+
 entry_guard:
-	ID EQUALS NAME { insert(head, $1, $3); }
+	ID EQUALS NAME LF { insert(head, $1, $3); }
 
 %%
 

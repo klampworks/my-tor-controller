@@ -3,24 +3,28 @@
 #include "comm.h"
 #include "entry_guard_lexer.h"
 
-void yyerror(struct node **start, const char*);
-int yyparse(struct node **head);
+void enterror(struct node **start, const char*);
+int entparse(struct node **head);
 void insert(struct node **, char *, char *);
+entdebug = 1;
 
 %}
 
 %union {
-	char *sval;
+	char  *sval;
 }
 
 %token <sval> ID;
 %token <sval> NAME;
+%token END EQUALS;
 
 %parse-param {struct node **head}
 %%
 
+start:
+	entry_guard
 entry_guard:
-	ID NAME { insert(head, $1, $2); }
+	ID EQUALS NAME { insert(head, $1, $3); }
 
 %%
 
@@ -46,7 +50,7 @@ void insert(struct node **head, char *id, char *name) {
 	}
 }
 
-void yyerror(struct node **head, const char *s) {
-	printf("Email me teh errors %s\n", s);
+void enterror(struct node **head, const char *s) {
+	printf("Emaill me teh errors %s\n", s);
 }
 

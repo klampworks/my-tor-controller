@@ -1,5 +1,5 @@
 all: entry_guard_lexer.c entry_guard.tab.c lex.yy.c return_code_p.tab.c
-	gcc main.c comm.c lex.yy.c return_code_p.tab.c entry_guard.tab.c entry_guard_lexer.c -lfl -std=gnu99
+	gcc main.c comm.c lex.yy.c return_code_p.tab.c entry_guard.tab.c entry_guard_lexer.c -lfl -pg -fno-pie -std=gnu99
 
 return_code_p.tab.c return_code_p.tab.h: return_code_p.y
 	bison -d return_code_p.y

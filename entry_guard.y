@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "comm.h"
 #include "entry_guard_lexer.h"
+#include <assert.h>
 
 void enterror(struct circuit **start, const char*);
 int entparse(struct circuit **head);
@@ -32,12 +33,22 @@ circuit:
 	} | circuit entry_guard | LF { 
 
 
-		printf("Extending head %d\n", head_i);
 		head_i++;
 		/* TODO: If this realloc fails, bad things happen. */
-		*head = realloc(*head, (sizeof *head) * (head_i + 1));
-		head[head_i] = malloc(sizeof *head);
-		head[head_i][0] = NULL;
+
+		/* TODO: Refactor common code. */
+		struct circuit *circur = *head;
+		for (int i = 0; i++ < head_i; circur = circur->child);
+		
+		/* Assuming that head_i always points to the end of the list. */
+		assert(!circur->child);
+
+		circur->child = malloc(sizeof *(circur->child));
+
+		circur = circur->child;
+
+		circur->child = NULL;
+		circur->head = NULL;
 	};
 
 entry_guard:

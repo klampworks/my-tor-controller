@@ -9,6 +9,7 @@ int entparse(struct circuit **head);
 void insert(struct circuit **, int, char *, char *);
 entdebug = 1;
 int head_i = 0;
+struct circuit* get(struct circuit *, int );
 
 %}
 
@@ -35,9 +36,7 @@ circuit:
 
 		/* TODO: If this realloc fails, bad things happen. */
 
-		/* TODO: Refactor common code. */
-		struct circuit *circur = *head;
-		for (int i = 0; i++ < head_i; circur = circur->child);
+		struct circuit *circur = get(*head, head_i);
 		
 		/* Assuming that head_i always points to the end of the list. */
 		assert(!circur->child);
@@ -57,15 +56,20 @@ entry_guard:
 
 %%
 
+struct circuit* get(struct circuit *circur, int head_i) {
+
+	/* Traverse down the linked list until we find the correct node */
+	for (int i = 0; i++ < head_i; circur = circur->child);
+	return circur;
+}
+
 void insert(struct circuit **head, int head_i, char *id, char *name) {
 
 	if (!*head)
 		*head = malloc(sizeof *head);
 
-	struct circuit *circur = *head;
-
-	/* Traverse down the linked list until we find the correct node */
-	for (int i = 0; i++ < head_i; circur = circur->child);
+	/* Get a pointer to the circuit referanced by index head_i. */
+	struct circuit *circur = get(*head, head_i);
 
 	/* circur now points to the desired circuit. */
 
@@ -88,17 +92,6 @@ void insert(struct circuit **head, int head_i, char *id, char *name) {
 
 		circur->head = to_insert;
 	}
-
-
-/*
-	for (struct circuit **j = headhead[0]; *j; j++) {
-		for (struct circuit *i = *j; i; i = i->child) {
-			printf("%s --> %s\n", i->id, i->name);
-		}
-		puts("end loop");
-	} 
-	*/
-
 }
 
 void enterror(struct circuit **head, const char *s) {

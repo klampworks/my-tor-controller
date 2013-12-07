@@ -33,9 +33,6 @@ circuit:
 	
 	} | circuit entry_guard | LF { 
 
-
-		/* TODO: If this realloc fails, bad things happen. */
-
 		struct circuit *circur = get(*head, head_i);
 		
 		/* Assuming that head_i always points to the end of the list. */

@@ -59,6 +59,9 @@ entry_guard:
 
 void insert(struct circuit **head, int head_i, char *id, char *name) {
 
+	if (!*head)
+		*head = malloc(sizeof *head);
+
 	struct circuit *circur = *head;
 
 	/* Traverse down the linked list until we find the correct node */

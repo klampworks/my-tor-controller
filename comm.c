@@ -137,15 +137,18 @@ int check_250(const char *message) {
 int parse_entry_guards(const char *message) {
 
 	YY_BUFFER_STATE i = ent_scan_string(message);
-	struct node ***head;
-	head = malloc((sizeof *head));
 
-	*head = malloc((sizeof *head) * 2);
-	head[0][0] = NULL;
-	head[0][1] = NULL;
+	struct circuit **head;
+	head = malloc((sizeof *head));
+	*head = NULL;
 
 	entparse(head);
 	ent_delete_buffer(i);
+
+	if (!*head) {
+		/* No circuits returned. */
+
+	}
 
 	int cir_count = 0;
 	for (struct circuit *i = *head; i; i = i->child) {

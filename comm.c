@@ -137,14 +137,36 @@ int check_250(const char *message) {
 int parse_entry_guards(const char *message) {
 
 	YY_BUFFER_STATE i = ent_scan_string(message);
-	struct node **head = malloc(sizeof(struct node*));
-	*head = NULL;
+	struct node ***head;
+	head = malloc((sizeof *head));
+
+	*head = malloc((sizeof *head) * 2);
+	head[0][0] = NULL;
+	head[0][1] = NULL;
+
 	entparse(head);
 	ent_delete_buffer(i);
 
+	printf("%p\n", head[0]);
+	printf("%p\n", head[0][0]);
+	//printf("%s\n", head[11][0]->name);
+	//printf("%s\n", head[10][0]->name);
+	//printf("%s\n", head[9][0]->name);
+	//printf("%s\n", head[8][0]->name);
+	//printf("%s\n", head[7][0]->name);
+	//printf("%s\n", head[6][0]->name);
+	//printf("%s\n", head[5][0]->name);
+	//printf("%s\n", head[4][0]->name);
+	//printf("%s\n", head[3][0]->name);
+	printf("%s\n", head[2][0]->name);
+	printf("%s\n", head[1][0]->name);
+	printf("%s\n", head[0][0]->name);
+	
 	/* Assuming a none empty list. */
-	for (struct node *i = *head; i; i = i->child) {
-		printf("%s --> %s\n", i->id, i->name);
+	for (struct node **j = *head; j; j++) {
+		for (struct node *i = *j; i; i = i->child) {
+			printf("%s --> %s\n", i->id, i->name);
+		}
 	}
 
 }

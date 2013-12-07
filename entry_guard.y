@@ -3,9 +3,9 @@
 #include "comm.h"
 #include "entry_guard_lexer.h"
 
-void enterror(struct node ***start, const char*);
-int entparse(struct node ***head);
-void insert(struct node ***, int, char *, char *);
+void enterror(struct circuit **start, const char*);
+int entparse(struct circuit **head);
+void insert(struct circuit **, int, char *, char *);
 entdebug = 1;
 int head_i = 0;
 
@@ -19,7 +19,8 @@ int head_i = 0;
 %token <sval> NAME;
 %token END EQUALS LF;
 
-%parse-param {struct node ***head}
+%parse-param {struct circuit **head}
+
 %%
 
 start:
@@ -44,35 +45,39 @@ entry_guard:
 
 %%
 
-void insert(struct node ***headhead, int head_i, char *id, char *name) {
+void insert(struct circuit **head, int head_i, char *id, char *name) {
 
-	struct node *head = headhead[0][head_i];
-	struct node *i;
+	struct circuit *circur = *head;
 
+	/* Traverse down the linked list until we find the correct node */
+	for (int i = 0; i++ < head_i; circur = circur->child);
+
+	/* circur now points to the desired circuit. */
+
+	/* Create the new node to insert. */
 	struct node *to_insert = malloc(sizeof *to_insert);
 	to_insert->id = id;
 	to_insert->name = name;
 	to_insert->child = NULL;
 
-	if (head) {
+	struct node *nodecur = circur->head;
+
+	if (nodecur) {
 
 		/* Traverse down to the end of the list. */
 		/* TODO: store tail. */
-		for(i = head; i->child; i = i->child);
+		for(; nodecur->child; nodecur = nodecur->child);
 
-		i->child = to_insert;
+		nodecur->child = to_insert;
 	} else {
 
-		printf("Inserting %s into slot %d\n", name, head_i);
-		head = to_insert;
+		circur->head = to_insert;
 	}
 
-	printf("%p\n", headhead[0][0]);
-	printf("%s\n", headhead[0][0]->name);
 
 /*
-	for (struct node **j = headhead[0]; *j; j++) {
-		for (struct node *i = *j; i; i = i->child) {
+	for (struct circuit **j = headhead[0]; *j; j++) {
+		for (struct circuit *i = *j; i; i = i->child) {
 			printf("%s --> %s\n", i->id, i->name);
 		}
 		puts("end loop");
@@ -81,7 +86,7 @@ void insert(struct node ***headhead, int head_i, char *id, char *name) {
 
 }
 
-void enterror(struct node ***head, const char *s) {
+void enterror(struct circuit **head, const char *s) {
 	printf("Emaill me teh errors %s\n", s);
 }
 

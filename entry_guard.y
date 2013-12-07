@@ -33,7 +33,6 @@ circuit:
 	} | circuit entry_guard | LF { 
 
 
-		head_i++;
 		/* TODO: If this realloc fails, bad things happen. */
 
 		/* TODO: Refactor common code. */
@@ -49,6 +48,8 @@ circuit:
 
 		circur->child = NULL;
 		circur->head = NULL;
+
+		head_i++;
 	};
 
 entry_guard:

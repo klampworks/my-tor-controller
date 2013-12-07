@@ -12,9 +12,18 @@
 
 	int parse_entry_guards(const char *msg);
 
+
 	struct node {
 		char *id;
 		char *name;
 		struct node *child;
+	};
+
+	struct circuit {
+
+		/* Head of a linked list of nodes */
+		struct node *head;
+		struct circuit *child;
+
 	};
 #endif

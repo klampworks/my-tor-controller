@@ -24,9 +24,9 @@ struct or_info {
 	char *ip;
 };
 
-struct circuit {
+struct circuitt {
 	struct or_info *or;
-	struct circuit *next;
+	struct circuitt *next;
 };
 
 char * find_2(const char* t, char s1, char s2) {
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
 		char *i = buf;
 		char *tmp = i;
 
-		struct circuit *cir = NULL;
+		struct circuitt *cir = NULL;
 		
 
 		for (;;) {

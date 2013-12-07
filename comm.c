@@ -147,29 +147,17 @@ int parse_entry_guards(const char *message) {
 	entparse(head);
 	ent_delete_buffer(i);
 
-	printf("%p\n", head[0]);
-	printf("%p\n", head[0][0]);
-	//printf("%s\n", head[11][0]->name);
-	//printf("%s\n", head[10][0]->name);
-	//printf("%s\n", head[9][0]->name);
-	//printf("%s\n", head[8][0]->name);
-	//printf("%s\n", head[7][0]->name);
-	//printf("%s\n", head[6][0]->name);
-	//printf("%s\n", head[5][0]->name);
-	//printf("%s\n", head[4][0]->name);
-	//printf("%s\n", head[3][0]->name);
-	printf("%s\n", head[2][0]->name);
-	printf("%s\n", head[1][0]->name);
-	printf("%s\n", head[0][0]->name);
-	
-	/* Assuming a none empty list. */
-	for (struct node **j = *head; j; j++) {
-		for (struct node *i = *j; i; i = i->child) {
-			printf("%s --> %s\n", i->id, i->name);
+	int cir_count = 0;
+	for (struct circuit *i = *head; i; i = i->child) {
+		
+		printf("Circuit %d\n", ++cir_count);
+
+		for (struct node *j = i->head; j; j = j->child) {
+			printf("%s --> %s\n", j->id, j->name);
 		}
 	}
-
 }
+
 char** parse_ids(const char *buf, int *num) {
 
 	//Having more than 3 or 4 entry guards is just plain dumb.

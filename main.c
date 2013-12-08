@@ -69,6 +69,32 @@ void print_info(struct node *node) {
 	print_ip(node);
 }
 
+void process_nodes(const char *msg, void(*fn)(struct node*)) {
+
+	my_send(s, msg);
+	my_recv(s, buf);
+
+	struct circuit *head = parse_entry_guards(buf);
+
+	for (struct circuit *i = head; i;) {
+		
+		for (struct node *j = i->head; j; ) {
+
+			fn(j);
+
+			free(j->id);
+			free(j->name);
+			struct node *t = j;
+			j = j->child;
+			free(t);
+		}
+
+		struct circuit *t = i;
+		i = i->child;
+		free(t);
+	}
+}
+
 int main(int argc, char *argv[]) {
 
 	if (argc < 3) {
@@ -136,30 +162,12 @@ int main(int argc, char *argv[]) {
 
 	if (dump_entry) {
 
-		my_send(s, "getinfo circuit-status\n");
-		//my_send(s, "getinfo entry-guards\n");
-		my_recv(s, buf);
+		process_nodes("getinfo entry-guards\n", &print_ip);
+	}
 
-		struct circuit *head = parse_entry_guards(buf);
+	if (dump_exit) {
+		process_nodes("getinfo circuit-status\n", &print_info);
 
-		for (struct circuit *i = head; i;) {
-			
-			for (struct node *j = i->head; j; ) {
-
-				//print_ip(j);
-				print_info(j);
-
-				free(j->id);
-				free(j->name);
-				struct node *t = j;
-				j = j->child;
-				free(t);
-			}
-
-			struct circuit *t = i;
-			i = i->child;
-			free(t);
-		}
 	}
 	return 0;
 }

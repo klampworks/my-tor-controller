@@ -34,20 +34,16 @@ ntor-onion-key 467ox5E7Va
 %}
 
 %option noyywrap
+%x L1, L2
 %%
 
-^250+		{ /* new line */ }
-^router		{ /* BEGIN(EX_NAME); */ }
-<EX_NAME>[ ]	;
-<EX_NAME>[^ ]+	{ /* name (we probably already know. BEGIN(EX_IP); */ }
-<EX_IP>[^ ]+	{ /* return ip address */ }
+^250\+[^\n]+	{ /* First line, contains information we already know. */ 
+			BEGIN(L1);
+		}
 
-Some numbers I don't know
-
-^platform 	{ /* BEGIN(EX-PLAT); */ }
-<EX_PLAT>[^\n]+ { /* return pltform */ }
-
-
-
+<L1>\n		{ BEGIN(L2); }
+<L2>[^ ]	{ dsclval.sval = strdup(dsctext); return TEXT; }
+<L2>[ ]		;
+<L2>\r\n	{ return END; }
 
 %%

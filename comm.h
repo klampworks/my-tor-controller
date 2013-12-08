@@ -10,7 +10,7 @@
 	char* parse_ip(const char*);
 	char** parse_ids(const char *buf, int *num);
 
-	int parse_entry_guards(const char *msg);
+	struct circuit * parse_entry_guards(const char *msg);
 
 
 	struct node {

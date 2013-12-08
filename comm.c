@@ -134,7 +134,7 @@ int check_250(const char *message) {
 #include "entry_guard.tab.h"
 #include "comm.h"
 
-int parse_entry_guards(const char *message) {
+struct circuit* parse_entry_guards(const char *message) {
 
 	YY_BUFFER_STATE i = ent_scan_string(message);
 
@@ -144,6 +144,8 @@ int parse_entry_guards(const char *message) {
 
 	entparse(head);
 	ent_delete_buffer(i);
+
+	return *head;
 
 	if (!*head) {
 		/* No circuits returned. */

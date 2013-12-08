@@ -3,6 +3,7 @@
 #include "comm.h"
 #include <stdlib.h>
 #include <alloca.h>
+#include <assert.h>
 
 #define MAXDATASIZE 1024
 
@@ -109,17 +110,55 @@ int main(int argc, char *argv[]) {
 		my_send(s, "getinfo entry-guards\n");
 		my_recv(s, buf);
 
-		parse_entry_guards(buf);
+		struct circuit *head = parse_entry_guards(buf);
 
 		int num = 0;
 
 		char **ids = parse_ids(buf, &num);
 
+		/* Prepare template text that will not change. */
 		char togo[17+41+2];
 		char *togo_i = togo+16;
 		strncpy(togo, "getinfo desc/id/", 16);
+
+		for (struct circuit *i = head; i;) {
+			
+			for (struct node *j = i->head; j; ) {
+
+				/* Copy the ID into the template buffer. */
+				assert(strlen(j->id) == 41);
+				strcpy(togo_i, j->id);
+
+				/* Send the query to the control port. */
+				my_send(s, togo);
+				my_recv(s, buf);
+
+				/* Parse out the IP address. */
+				char *ip = parse_ip(buf);
+
+				if (ip) { 
+					printf("%s\n", ip);
+					free(ip);
+				}
+
+				free(j->id);
+				free(j->name);
+				struct node *t = j;
+				j = j->child;
+				free(t);
+			}
+
+			struct circuit *t = i;
+			i = i->child;
+			free(t);
+		}
+
+		exit(1);;
+		/* Prepare the buffer that will hold the text that does change
+		char *togo_i = togo+16;
 		togo_i[41] = '\n';
 		togo_i[41+1] = '\0';
+		*/
 
 		for (int i = 0; i < num; i++) {
 
@@ -147,7 +186,7 @@ int main(int argc, char *argv[]) {
 		my_send(s, "getinfo circuit-status\n");
 		my_recv(s, buf);
 
-		parse_entry_guards(buf);
+		struct circuit *head = parse_entry_guards(buf);
 
 		char *i = buf;
 		char *tmp = i;

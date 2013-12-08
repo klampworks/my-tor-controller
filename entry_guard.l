@@ -9,7 +9,7 @@
 %%
 $[0-9A-Z]{40}	    	{ entlval.sval = strdup(enttext); BEGIN(EQ); return ID; }
 <EQ>[=~]		    	{ BEGIN(NM); return EQUALS; }
-<NM>[a-zA-Z0-9]+	{ printf("NAME %s\n", enttext); entlval.sval = strdup(enttext); return NAME; }
+<NM>[a-zA-Z0-9]+	{ entlval.sval = strdup(enttext); return NAME; }
 <NM>,			{ BEGIN(0); }
 <NM>[ ].*			;
 .			{ }

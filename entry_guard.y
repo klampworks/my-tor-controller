@@ -7,7 +7,7 @@
 void enterror(struct circuit **start, const char*);
 int entparse(struct circuit **head);
 void insert(struct circuit **, int, char *, char *);
-entdebug = 1;
+//entdebug = 1;
 int head_i = 0;
 struct circuit* get(struct circuit *, int );
 
@@ -92,6 +92,6 @@ void insert(struct circuit **head, int head_i, char *id, char *name) {
 }
 
 void enterror(struct circuit **head, const char *s) {
-	printf("Emaill me teh errors %s\n", s);
+//	printf("Emaill me teh errors %s\n", s);
 }
 

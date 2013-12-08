@@ -109,11 +109,7 @@ int main(int argc, char *argv[]) {
 		my_send(s, "getinfo entry-guards\n");
 		my_recv(s, buf);
 
-		puts(buf);
-
 		parse_entry_guards(buf);
-		//exit(1);
-
 
 		int num = 0;
 
@@ -151,9 +147,7 @@ int main(int argc, char *argv[]) {
 		my_send(s, "getinfo circuit-status\n");
 		my_recv(s, buf);
 
-		puts(buf);
 		parse_entry_guards(buf);
-		//exit(1);
 
 		char *i = buf;
 		char *tmp = i;

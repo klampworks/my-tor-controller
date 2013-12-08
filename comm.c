@@ -153,10 +153,10 @@ int parse_entry_guards(const char *message) {
 	int cir_count = 0;
 	for (struct circuit *i = *head; i; i = i->child) {
 		
-		printf("Circuit %d\n", ++cir_count);
+	//	printf("Circuit %d\n", ++cir_count);
 
 		for (struct node *j = i->head; j; j = j->child) {
-			printf("%s --> %s\n", j->id, j->name);
+	//		printf("%s --> %s\n", j->id, j->name);
 		}
 	}
 }
@@ -201,7 +201,6 @@ char* parse_ip(const char *buf) {
 	dscparse(&m_desc);
 	dsc_delete_buffer(i);
 
-	printf("Ip = %s\n", m_desc.ip_address);
 	return m_desc.ip_address;
 	/*
 	char *st = strchr(buf, '\n'),

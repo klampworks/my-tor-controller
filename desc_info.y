@@ -4,8 +4,7 @@
 #include "desc_info.lexer.h"
 
 void dscerror(struct desc *desc, const char*);
-int dscparse(struct desc *m_desc);
-
+int dscparse(struct desc  *m_desc);
 
 %}
 
@@ -26,6 +25,6 @@ start:
 %%
 
 void dscerror(struct desc *desc, const char *s) {
-	printf("Email me teh errors %s\n", s);
+	//printf("Email me teh errors %s\n", s);
 }
 

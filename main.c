@@ -56,6 +56,11 @@ void print_ip(struct node *node) {
 
 	/* Parse out the IP address. */
 	char *ip = parse_ip(buf);
+
+	if (ip) { 
+		printf("%s\n", ip);
+		free(ip);
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -130,30 +135,11 @@ int main(int argc, char *argv[]) {
 
 		struct circuit *head = parse_entry_guards(buf);
 
-		/* Prepare template text that will not change. */
-		char togo[17+41+2];
-		char *togo_i = togo+16;
-		strncpy(togo, "getinfo desc/id/", 16);
-
 		for (struct circuit *i = head; i;) {
 			
 			for (struct node *j = i->head; j; ) {
 
-				/* Copy the ID into the template buffer. */
-				assert(strlen(j->id) == 41);
-				strcpy(togo_i, j->id);
-
-				/* Send the query to the control port. */
-				my_send(s, togo);
-				my_recv(s, buf);
-
-				/* Parse out the IP address. */
-				char *ip = parse_ip(buf);
-
-				if (ip) { 
-					printf("%s\n", ip);
-					free(ip);
-				}
+				print_ip(j);
 
 				free(j->id);
 				free(j->name);

@@ -7,6 +7,12 @@
 
 #define MAXDATASIZE 1024
 
+/* Socket file descriptor. */
+static int s;
+
+/* Socket responses. */
+static char buf[MAXDATASIZE];
+
 void scrub_password(char *password) {
 	memset(password, '0', strlen(password));
 }
@@ -25,18 +31,31 @@ struct or_info {
 	char *ip;
 };
 
-struct circuitt {
-	struct or_info *or;
-	struct circuitt *next;
-};
+void print_ip(struct node *node) {
 
-char * find_2(const char* t, char s1, char s2) {
+	/* Prepare template text that will not change. */
+	static char togo[17+41+2];
+	static char *togo_i = togo+16;
 
-	char *st1 = NULL, *st2 = NULL;
-	if (((st1 = strchr(t, s1)) && (st2 = strchr(t, s2)))) 
-		return st1 < st2? st1 : st2;
-	else
-		return st1? st1 : st2? st2 : NULL;
+	/* Is there a way to initialise a char array with an initial value
+	 * and have it still read/ write? */
+	static int first = 1;
+	if (first) { 
+		strncpy(togo, "getinfo desc/id/", 16);
+		first = 0;
+	}
+
+
+	/* Copy the ID into the template buffer. */
+	assert(strlen(node->id) == 41);
+	strcpy(togo_i, node->id);
+
+	/* Send the query to the control port. */
+	my_send(s, togo);
+	my_recv(s, buf);
+
+	/* Parse out the IP address. */
+	char *ip = parse_ip(buf);
 }
 
 int main(int argc, char *argv[]) {
@@ -81,11 +100,10 @@ int main(int argc, char *argv[]) {
 
 	}
 
-	int s = create_socket("127.0.0.1", port);
+	s = create_socket("127.0.0.1", port);
 
 	auth(s, password);
 
-	char buf[MAXDATASIZE];
 	my_recv(s, buf);
 
 	scrub_password(password);
@@ -149,8 +167,11 @@ int main(int argc, char *argv[]) {
 			free(t);
 		}
 	}
+	return 0;
+}
 
 	//TODO reused code.
+	/*
 	if (dump_exit) {
 
 		my_send(s, "getinfo circuit-status\n");
@@ -220,7 +241,6 @@ int main(int argc, char *argv[]) {
 			tmp = lf+1;
 			continue;
 
-			/*
 			if (!(tmp = strchr(tmp, '$'))) 
 				break;
 
@@ -234,9 +254,7 @@ int main(int argc, char *argv[]) {
 			puts(id);
 			i = ++tmp;
 			continue;
-			*/
 		}
 	}
 
-	return 0;
-}
+	*/

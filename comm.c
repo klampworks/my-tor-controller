@@ -123,11 +123,6 @@ int check_250(const char *message) {
 		return 0;
 	}
 
-/*
-	static const char *ok = "250 OK\r\n";
-
-	return !strcmp(ok, message);
-*/
 }
 
 #include "entry_guard_lexer.h"
@@ -146,23 +141,9 @@ struct circuit* parse_entry_guards(const char *message) {
 	ent_delete_buffer(i);
 
 	return *head;
-
-	if (!*head) {
-		/* No circuits returned. */
-
-	}
-
-	int cir_count = 0;
-	for (struct circuit *i = *head; i; i = i->child) {
-		
-	//	printf("Circuit %d\n", ++cir_count);
-
-		for (struct node *j = i->head; j; j = j->child) {
-	//		printf("%s --> %s\n", j->id, j->name);
-		}
-	}
 }
 
+/* Unused. */
 char** parse_ids(const char *buf, int *num) {
 
 	//Having more than 3 or 4 entry guards is just plain dumb.
@@ -204,20 +185,4 @@ char* parse_ip(const char *buf) {
 	dsc_delete_buffer(i);
 
 	return m_desc.ip_address;
-	/*
-	char *st = strchr(buf, '\n'),
-	    *en = strchr(st+1, '\n');
-
-	if (!st) return '\0';
-	if (!en) return '\0';
-	
-	st = strchr(st, ' ');		if (!st) return '\0';
-	st = strchr(st+1, ' ') + 1;	if (!st) return '\0';
-	en = strchr(st, ' ');		if (!en) return '\0';
-	char *ip_line = malloc((en - st + 1) * sizeof *ip_line);
-	strncpy(ip_line, st, en - st);
-	ip_line[en-st] = '\0';
-
-	return ip_line;
-	*/
 }

@@ -4,7 +4,8 @@
 #include "desc_info.lexer.h"
 
 void dscerror(struct desc *desc, const char*);
-int dscparse(struct desc *desc);
+int dscparse(struct desc *m_desc);
+
 
 %}
 
@@ -12,11 +13,14 @@ int dscparse(struct desc *desc);
 	char  *sval;
 }
 
-%parse-param {struct desc *desc}
+%token <sval> IP;
+
+%parse-param {struct desc *m_desc}
 
 %%
 
 start:
+	IP { m_desc->ip_address = $1; }
 	
 
 %%

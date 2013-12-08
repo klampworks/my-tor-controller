@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
 		puts(buf);
 
 		parse_entry_guards(buf);
-		exit(1);
+		//exit(1);
 
 
 		int num = 0;
@@ -133,6 +133,7 @@ int main(int argc, char *argv[]) {
 			my_send(s, togo);
 			my_recv(s, buf);
 
+
 			char *ip = parse_ip(buf);
 			if (ip) { 
 				printf("%s\n", ip);
@@ -150,6 +151,9 @@ int main(int argc, char *argv[]) {
 		my_send(s, "getinfo circuit-status\n");
 		my_recv(s, buf);
 
+		puts(buf);
+		parse_entry_guards(buf);
+		//exit(1);
 
 		char *i = buf;
 		char *tmp = i;

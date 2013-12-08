@@ -34,7 +34,7 @@ ntor-onion-key 467ox5E7Va
 %}
 
 %option noyywrap
-%x L1, L2
+%x L1 L2
 %%
 
 ^250\+[^\n]+	{ /* First line, contains information we already know. */ 
@@ -45,6 +45,6 @@ ntor-onion-key 467ox5E7Va
 <L2>[^ ]	;
 <L2>([0-9]+\.){3}[0-9]+	{ dsclval.sval = strdup(dsctext); return IP; }
 <L2>[ ]		;
-<L2>\r\n	{ return END; }
+<L2>\r\n	;
 
 %%

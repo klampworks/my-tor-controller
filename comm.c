@@ -191,8 +191,19 @@ char** parse_ids(const char *buf, int *num) {
 	return ids;
 }
 
+#include "entry_guard_lexer.h"
+#include "entry_guard.tab.h"
 char* parse_ip(const char *buf) {
 
+	struct desc m_desc;
+
+	YY_BUFFER_STATE i = dsc_scan_string(buf);
+	dscparse(&m_desc);
+	dsc_delete_buffer(i);
+
+	printf("Ip = %s\n", m_desc.ip_address);
+	return m_desc.ip_address;
+	/*
 	char *st = strchr(buf, '\n'),
 	    *en = strchr(st+1, '\n');
 
@@ -207,4 +218,5 @@ char* parse_ip(const char *buf) {
 	ip_line[en-st] = '\0';
 
 	return ip_line;
+	*/
 }

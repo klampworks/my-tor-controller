@@ -63,6 +63,12 @@ void print_ip(struct node *node) {
 	}
 }
 
+void print_info(struct node *node) {
+
+	printf("%s -- %s -- ", node->id, node->name);
+	print_ip(node);
+}
+
 int main(int argc, char *argv[]) {
 
 	if (argc < 3) {
@@ -130,7 +136,8 @@ int main(int argc, char *argv[]) {
 
 	if (dump_entry) {
 
-		my_send(s, "getinfo entry-guards\n");
+		my_send(s, "getinfo circuit-status\n");
+		//my_send(s, "getinfo entry-guards\n");
 		my_recv(s, buf);
 
 		struct circuit *head = parse_entry_guards(buf);
@@ -139,7 +146,8 @@ int main(int argc, char *argv[]) {
 			
 			for (struct node *j = i->head; j; ) {
 
-				print_ip(j);
+				//print_ip(j);
+				print_info(j);
 
 				free(j->id);
 				free(j->name);

@@ -112,10 +112,6 @@ int main(int argc, char *argv[]) {
 
 		struct circuit *head = parse_entry_guards(buf);
 
-		int num = 0;
-
-		char **ids = parse_ids(buf, &num);
-
 		/* Prepare template text that will not change. */
 		char togo[17+41+2];
 		char *togo_i = togo+16;
@@ -152,32 +148,6 @@ int main(int argc, char *argv[]) {
 			i = i->child;
 			free(t);
 		}
-
-		exit(1);;
-		/* Prepare the buffer that will hold the text that does change
-		char *togo_i = togo+16;
-		togo_i[41] = '\n';
-		togo_i[41+1] = '\0';
-		*/
-
-		for (int i = 0; i < num; i++) {
-
-			//This requires UseMicrodescriptors 0 in torrc
-			strncpy(togo_i, ids[i], 41);
-
-			my_send(s, togo);
-			my_recv(s, buf);
-
-
-			char *ip = parse_ip(buf);
-			if (ip) { 
-				printf("%s\n", ip);
-				free(ip);
-			}
-			free(ids[i]);
-		}
-
-
 	}
 
 	//TODO reused code.

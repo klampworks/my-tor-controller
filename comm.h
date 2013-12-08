@@ -26,4 +26,10 @@
 		struct circuit *child;
 
 	};
+
+	struct desc {
+
+		char *ip_address;
+
+	};
 #endif

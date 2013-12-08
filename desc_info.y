@@ -2,10 +2,9 @@
 #include <stdio.h>
 #include "comm.h"
 #include "desc_info.lexer.h"
-#include <assert.h>
 
-void dscerror(struct circuit **start, const char*);
-int dscparse(struct circuit **head);
+void dscerror(struct desc *desc, const char*);
+int dscparse(struct desc *desc);
 
 %}
 
@@ -13,14 +12,16 @@ int dscparse(struct circuit **head);
 	char  *sval;
 }
 
-%parse-param {struct circuit **head}
+%parse-param {struct desc *desc}
 
 %%
 
+start:
+	
 
 %%
 
-void dscerror(struct circuit **head, const char *s) {
-	printf("Emaill me teh errors %s\n", s);
+void dscerror(struct desc *desc, const char *s) {
+	printf("Email me teh errors %s\n", s);
 }
 

@@ -63,6 +63,15 @@ void print_ip(struct node *node) {
 	}
 }
 
+void print_exit(struct node *node) {
+
+	/* Check that this is the last in the chain.
+	 * TODO: This won't work for single hop circuits. */
+	if (!node->child) {
+		print_info(node);
+	}
+}
+
 void print_info(struct node *node) {
 
 	printf("%s -- %s -- ", node->id, node->name);
@@ -106,7 +115,7 @@ int main(int argc, char *argv[]) {
 
 	short port = -1;
 	char *password = NULL;
-	int new_circuit = 0, dump_entry = 0, dump_exit = 0;
+	int new_circuit = 0, dump_entry = 0, dump_exit = 0, dump_full = 0;
 
 	for (int i = 1; i < argc; i++) {
 		
@@ -128,6 +137,9 @@ int main(int argc, char *argv[]) {
 				continue;
 			case 'x':
 				dump_exit = 1;
+				continue;
+			case 'f':
+				dump_full = 1;
 				continue;
 			}
 
@@ -151,8 +163,6 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	} 
 
-
-	
 	if (new_circuit) {
 
 		newnym(s);
@@ -166,6 +176,11 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (dump_exit) {
+		process_nodes("getinfo circuit-status\n", &print_exit);
+
+	}
+
+	if (dump_full) {
 		process_nodes("getinfo circuit-status\n", &print_info);
 
 	}

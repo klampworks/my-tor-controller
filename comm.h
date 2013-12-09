@@ -31,6 +31,7 @@
 
 		char *ip_address;
 		char *platform;
+		int uptime;
 
 	};
 #endif

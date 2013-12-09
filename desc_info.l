@@ -45,6 +45,7 @@ ntor-onion-key 467ox5E7Va
 <L2>[^ ]	;
 <L2>([0-9]+\.){3}[0-9]+	{ dsclval.sval = strdup(dsctext); return IP; }
 <L2>[ ]		;
-<L2>\r\n	;
+<L2>\r\n	{ BEGIN(L3); }
+<L3>[^\n]+	{ dsclval.sval = strdup(dsctext); return PLATFORM; }
 
 %%

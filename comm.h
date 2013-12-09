@@ -18,6 +18,7 @@
 	char* parse_ip(const char*);
 	struct desc* parse_desc(const char *buf);
 	char** parse_ids(const char *buf, int *num);
+	void release_desc(struct desc*);
 
 	struct circuit * parse_entry_guards(const char *msg);
 

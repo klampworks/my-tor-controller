@@ -72,7 +72,7 @@ void print_desc(struct node *node) {
 
 	printf("Uptime = %d\n", m_desc->uptime);
 
-	release(m_desc);
+	release_desc(m_desc);
 }
 
 void print_ip(struct node *node) {
@@ -82,7 +82,7 @@ void print_ip(struct node *node) {
 	if (m_desc && m_desc->ip_address)
 			printf("%s\n", m_desc->ip_address);
 
-	release(m_desc);
+	release_desc(m_desc);
 
 }
 

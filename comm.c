@@ -198,3 +198,17 @@ char* parse_ip(const char *buf) {
 
 	return ret;
 }
+
+void release_desc(struct desc *m_desc) {
+
+	if (!m_desc)
+		return;
+
+	if (m_desc->ip_address)
+		free(m_desc->ip_address);
+
+	if (m_desc->platform)
+		free(m_desc->platform);
+
+	free(m_desc);
+}

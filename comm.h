@@ -30,6 +30,7 @@
 	struct desc {
 
 		char *ip_address;
+		char *platform;
 
 	};
 #endif

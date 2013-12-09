@@ -57,6 +57,23 @@ struct desc* get_desc(struct node *node) {
 	return parse_desc(buf);
 }
 
+void print_desc(struct node *node) {
+
+	struct desc *m_desc = get_desc(node);
+
+	if (!m_desc)
+		return;
+
+	if (m_desc->ip_address)
+		printf("IP = %s\n", m_desc->ip_address);
+
+	if (m_desc->platform)
+		printf("Platform = %s\n", m_desc->platform);
+
+	printf("Uptime = %d\n", m_desc->uptime);
+
+	release(m_desc);
+}
 
 void print_ip(struct node *node) {
 

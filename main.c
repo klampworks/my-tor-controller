@@ -31,7 +31,7 @@ struct or_info {
 	char *ip;
 };
 
-void print_ip(struct node *node) {
+struct desc* get_desc(struct node *node) {
 
 	/* Prepare template text that will not change. */
 	static char togo[17+41+2];
@@ -45,7 +45,6 @@ void print_ip(struct node *node) {
 		first = 0;
 	}
 
-
 	/* Copy the ID into the template buffer. */
 	assert(strlen(node->id) == 41);
 	strcpy(togo_i, node->id);
@@ -54,13 +53,20 @@ void print_ip(struct node *node) {
 	my_send(s, togo);
 	my_recv(s, buf);
 
-	/* Parse out the IP address. */
-	char *ip = parse_ip(buf);
+	/* Parse out the desc data. */
+	return parse_desc(buf);
+}
 
-	if (ip) { 
-		printf("%s\n", ip);
-		free(ip);
-	}
+
+void print_ip(struct node *node) {
+
+	struct desc *m_desc = get_desc(node);
+
+	if (m_desc && m_desc->ip_address)
+			printf("%s\n", m_desc->ip_address);
+
+	release(m_desc);
+
 }
 
 void print_exit(struct node *node) {

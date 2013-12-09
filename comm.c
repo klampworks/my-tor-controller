@@ -176,13 +176,25 @@ char** parse_ids(const char *buf, int *num) {
 
 #include "entry_guard_lexer.h"
 #include "entry_guard.tab.h"
-char* parse_ip(const char *buf) {
 
-	struct desc m_desc;
+struct desc* parse_desc(const char *buf) {
+
+	struct desc *m_desc = malloc(sizeof *m_desc);
 
 	YY_BUFFER_STATE i = dsc_scan_string(buf);
-	dscparse(&m_desc);
+	dscparse(m_desc);
 	dsc_delete_buffer(i);
 
-	return m_desc.ip_address;
+	return m_desc;
+}
+
+char* parse_ip(const char *buf) {
+
+	struct desc *m_desc = parse_desc(buf);
+
+	free(m_desc->platform);
+	char *ret = m_desc->ip_address;
+	free(m_desc);
+
+	return ret;
 }

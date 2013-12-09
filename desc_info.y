@@ -6,6 +6,7 @@
 void dscerror(struct desc *desc, const char*);
 int dscparse(struct desc  *m_desc);
 
+dscdebug = 1;
 %}
 
 %union {
@@ -22,8 +23,17 @@ int dscparse(struct desc  *m_desc);
 %%
 
 start:
-	IP { m_desc->ip_address = $1; }
+	ip platform uptime
+
+ip:
+	IP { m_desc->ip_address = $1;  }
+
+	
+platform:
 	PLATFORM { m_desc->platform = $1; }
+
+	
+uptime:
 	UPTIME { m_desc->uptime = $1; }
 	
 

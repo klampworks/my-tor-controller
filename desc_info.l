@@ -48,5 +48,5 @@ ntor-onion-key 467ox5E7Va
 <L2>\r\n	{ BEGIN(L3); }
 <L3>[^\n]+	{ dsclval.sval = strdup(dsctext); BEGIN(0); return PLATFORM; }
 ^uptime		{ BEGIN(UPTIME); }
-<UPTIME>[0-9]+	{ dsclval.ival = atoi(dsctext); return UPTIME; 
+<UPTIME>[0-9]+	{ dsclval.ival = atoi(dsctext); return UPTIME; }
 %%

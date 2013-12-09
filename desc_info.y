@@ -13,6 +13,7 @@ int dscparse(struct desc  *m_desc);
 }
 
 %token <sval> IP;
+%token <sval> PLATFORM;
 
 %parse-param {struct desc *m_desc}
 
@@ -20,6 +21,7 @@ int dscparse(struct desc  *m_desc);
 
 start:
 	IP { m_desc->ip_address = $1; }
+	PLATFORM { m_desc->platform = $1; }
 	
 
 %%

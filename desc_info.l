@@ -34,7 +34,7 @@ ntor-onion-key 467ox5E7Va
 %}
 
 %option noyywrap
-%x L1 L2
+%x L1 L2 L3
 %%
 
 ^250\+[^\n]+	{ /* First line, contains information we already know. */ 

@@ -34,7 +34,7 @@ ntor-onion-key 467ox5E7Va
 %}
 
 %option noyywrap
-%x L1 L2 L3
+%x L1 L2 L3 UPTIME
 %%
 
 ^250\+[^\n]+	{ /* First line, contains information we already know. */ 
@@ -46,6 +46,7 @@ ntor-onion-key 467ox5E7Va
 <L2>([0-9]+\.){3}[0-9]+	{ dsclval.sval = strdup(dsctext); return IP; }
 <L2>[ ]		;
 <L2>\r\n	{ BEGIN(L3); }
-<L3>[^\n]+	{ dsclval.sval = strdup(dsctext); return PLATFORM; }
-
+<L3>[^\n]+	{ dsclval.sval = strdup(dsctext); BEGIN(0); return PLATFORM; }
+^uptime		{ BEGIN(UPTIME); }
+<UPTIME>[0-9]+	{ dsclval.ival = atoi(dsctext); return UPTIME; 
 %%

@@ -48,10 +48,11 @@ ntor-onion-key 467ox5E7Va
 <L2>\r\n	{ BEGIN(L3); }
 <L3>[^\n]+	{ dsclval.sval = strdup(dsctext); BEGIN(JUNK1); return PLATFORM; }
 
-<JUNK1>\n[^\n]+\n { puts(dsctext); BEGIN(JUNK2); }
-<JUNK2>[^\n]+\n { puts(dsctext);BEGIN(JUNK3); }
-<JUNK3>[^\n]+\n { puts(dsctext);BEGIN(0); }
+<JUNK1>\n[^\n]+\n { BEGIN(JUNK2); }
+<JUNK2>[^\n]+\n { BEGIN(JUNK3); }
+<JUNK3>[^\n]+\n { BEGIN(0); }
 
-^uptime[ ]	{ puts("uptime"); BEGIN(UP); }
-<UP>[0-9]+	{ dsclval.ival = atoi(dsctext); printf("h%d\n", dsclval.ival); BEGIN(0); return UPTIME; }
+^uptime[ ]	{ BEGIN(UP); }
+<UP>[0-9]+	{ dsclval.ival = atoi(dsctext); BEGIN(0); return UPTIME; }
+.		;
 %%

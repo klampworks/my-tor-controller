@@ -6,7 +6,7 @@
 void dscerror(struct desc *desc, const char*);
 int dscparse(struct desc  *m_desc);
 
-dscdebug = 1;
+//dscdebug = 1;
 %}
 
 %union {

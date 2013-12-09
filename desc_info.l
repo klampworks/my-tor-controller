@@ -34,7 +34,7 @@ ntor-onion-key 467ox5E7Va
 %}
 
 %option noyywrap
-%x L1 L2 L3 UPTIME JUNK1 JUNK2 JUNK3
+%x L1 L2 L3 UP JUNK1 JUNK2 JUNK3
 %%
 
 ^250\+[^\n]+	{ /* First line, contains information we already know. */ 
@@ -52,6 +52,6 @@ ntor-onion-key 467ox5E7Va
 <JUNK2>[^\n]+\n { puts(dsctext);BEGIN(JUNK3); }
 <JUNK3>[^\n]+\n { puts(dsctext);BEGIN(0); }
 
-^uptime[ ]	{ puts("uptime"); BEGIN(UPTIME); }
-<UPTIME>[0-9]+	{ dsclval.ival = atoi(dsctext); BEGIN(0); return UPTIME; }
+^uptime[ ]	{ puts("uptime"); BEGIN(UP); }
+<UP>[0-9]+	{ dsclval.ival = atoi(dsctext); printf("h%d\n", dsclval.ival); BEGIN(0); return UPTIME; }
 %%

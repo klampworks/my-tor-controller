@@ -55,4 +55,5 @@ ntor-onion-key 467ox5E7Va
 ^uptime[ ]	{ BEGIN(UP); }
 <UP>[0-9]+	{ dsclval.ival = atoi(dsctext); BEGIN(0); return UPTIME; }
 .		;
+\n		;
 %%

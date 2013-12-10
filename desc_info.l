@@ -56,7 +56,7 @@ ntor-onion-key 467ox5E7Va
 <UP>[0-9]+	{ dsclval.ival = atoi(dsctext); BEGIN(0); return UPTIME; }
 
 ^bandwidth[ ]	{ BEGIN(BW); } 
-<BW>[ ]?[0-9]+	{ dscval.ival = atoi(dsctext); return BANDWIDTH; }
+<BW>[ ]?[0-9]+	{ dsclval.ival = atoi(dsctext); return BANDWIDTH; }
 <BW>\r\n	{ BEGIN(0);}
 .		;
 \n		;

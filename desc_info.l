@@ -63,7 +63,7 @@ ntor-onion-key 467ox5E7Va
 <OK>\-\-\-\--BEGIN\ RSA\ PUBLIC\ KEY\-\-\-\-\-\r\n ;
 <OK>[^-\r]+	{ dsclval.sval = strdup(dsctext); return ONION_KEY; }
 <OK>\r\n	;
-\-\-\-\-\-END\ RSA\ PUBLIC\ KEY\-\-\-\-\-\r\n	{ BEGIN(0); }
+<OK>\-\-\-\-\-END\ RSA\ PUBLIC\ KEY\-\-\-\-\-\r\n	{ BEGIN(0); }
 .		;
 \n		;
 %%

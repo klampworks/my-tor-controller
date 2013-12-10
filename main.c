@@ -75,6 +75,8 @@ void print_desc(struct node *node) {
 	printf("Bandwidth:\n\tmin = %d\n\tmax = %d\n\tavg = %d\n", 
 		m_desc->bw_min, m_desc->bw_max, m_desc->bw_avg);
 
+	if (m_desc->onion_key)
+		printf("Onion key = %s\n", m_desc->onion_key);
 	release_desc(m_desc);
 }
 
@@ -207,7 +209,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (dump_full) {
-		printf("dskl;");
 		process_nodes("getinfo circuit-status\n", &print_info);
 
 	}

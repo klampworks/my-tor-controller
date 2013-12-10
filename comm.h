@@ -6,6 +6,7 @@
 		char *ip_address;
 		char *platform;
 		int uptime;
+		int bw_min, bw_max, bw_avg;
 
 	};
 

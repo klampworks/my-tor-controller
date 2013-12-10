@@ -34,7 +34,7 @@ ntor-onion-key 467ox5E7Va
 %}
 
 %option noyywrap
-%x L1 L2 L3 UP JUNK1 JUNK2 JUNK3
+%x L1 L2 L3 UP JUNK1 JUNK2 JUNK3 BW
 %%
 
 ^250\+[^\n]+	{ /* First line, contains information we already know. */ 
@@ -54,6 +54,10 @@ ntor-onion-key 467ox5E7Va
 
 ^uptime[ ]	{ BEGIN(UP); }
 <UP>[0-9]+	{ dsclval.ival = atoi(dsctext); BEGIN(0); return UPTIME; }
+
+^bandwidth[ ]	{ BEGIN(BW); } 
+<BW>[ ]?[0-9]+	{ dscval.ival = atoi(dsctext); return BANDWIDTH; }
+<BW>\r\n	{ BEGIN(0);
 .		;
 \n		;
 %%

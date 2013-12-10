@@ -6,6 +6,8 @@
 void dscerror(struct desc *desc, const char*);
 int dscparse(struct desc  *m_desc);
 
+char *rsa_index;
+
 //dscdebug = 1;
 %}
 
@@ -16,6 +18,7 @@ int dscparse(struct desc  *m_desc);
 
 %token <sval> IP;
 %token <sval> PLATFORM;
+%token <sval> ONION_KEY;
 %token <ival> UPTIME;
 %token <ival> BANDWIDTH;
 
@@ -24,7 +27,7 @@ int dscparse(struct desc  *m_desc);
 %%
 
 start:
-	ip platform uptime bandwidth
+	ip platform uptime bandwidth onion_key
 
 ip:
 	IP { m_desc->ip_address = $1;  }
@@ -43,6 +46,26 @@ bandwidth:
 					m_desc->bw_avg = $3;
 					}
 
+onion_key:
+	ONION_KEY { 
+		m_desc->onion_key = malloc(189);
+		int len = strlen($1);
+		strncpy(m_desc->onion_key, $1, len);
+		rsa_index = m_desc->onion_key + len;
+		rsa_index[188] = '\0';
+		}
+
+	| onion_key ONION_KEY {
+		
+		int len = strlen($2);
+
+		/* Most likely an attack. */
+		assert((rsa_index - m_desc->onion_key) + len < 189); 
+
+		strncpy(rsa_index, $2, len);
+		rsa_index += len;
+	
+		}
 %%
 
 void dscerror(struct desc *desc, const char *s) {

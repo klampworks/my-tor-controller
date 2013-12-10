@@ -134,7 +134,7 @@ void process_nodes(const char *msg, void(*fn)(struct node*)) {
 
 int main(int argc, char *argv[]) {
 
-	if (argc < 3) {
+	if (argc < 2) {
 		printf("Usage: %s -p <control port> -a <password> (-n|-d)\n"
 			"-n New Tor circuit.\n"
 			"-d dump Entry guard ip addresses.\n", argv[0]);
@@ -185,6 +185,15 @@ int main(int argc, char *argv[]) {
 
 		//Get username and password from file.
 
+		FILE *fd = fopen(filename, "r");
+		assert(fd);
+
+		/* A pointer to a value inside main's stack frame is
+		 * effectivly global. */
+		password = alloca(66);
+
+		fscanf(fd, "%d", &port);
+		fscanf(fd, "%66s", password);
 	}
 
 	s = create_socket("127.0.0.1", port);

@@ -144,6 +144,7 @@ int main(int argc, char *argv[]) {
 	short port = -1;
 	char *password = NULL;
 	int new_circuit = 0, dump_entry = 0, dump_exit = 0, dump_full = 0;
+	char *filename = NULL;
 
 	for (int i = 1; i < argc; i++) {
 		
@@ -169,11 +170,20 @@ int main(int argc, char *argv[]) {
 			case 'f':
 				dump_full = 1;
 				continue;
+			case 'P':
+				filename = ++i < argc ? argv[i] : (char*)error("Not enough arguments.");
+				continue;
 			}
 
 		} else {
 			error("Error unrecognised option.");
 		}
+
+	}
+
+	if (filename) {
+
+		//Get username and password from file.
 
 	}
 

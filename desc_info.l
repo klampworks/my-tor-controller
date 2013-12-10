@@ -58,6 +58,12 @@ ntor-onion-key 467ox5E7Va
 ^bandwidth[ ]	{ BEGIN(BW); } 
 <BW>[ ]?[0-9]+	{ dsclval.ival = atoi(dsctext); return BANDWIDTH; }
 <BW>\r\n	{ BEGIN(0);}
+
+^onion-key\r\n 	{ BEGIN(OK); }
+<OK>\-\-\-\--BEGIN\ RSA\ PUBLIC\ KEY\-\-\-\-\-\r\n ;
+<OK>[^-\r]+	{ dsclval.sval = strdup(dsctext); return ONION_KEY; }
+<OK>\r\n	;
+\-\-\-\-\-END\ RSA\ PUBLIC\ KEY\-\-\-\-\-\r\n	{ BEGIN(0); }
 .		;
 \n		;
 %%

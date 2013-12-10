@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "comm.h"
 #include "desc_info.lexer.h"
+#include <assert.h>
 
 void dscerror(struct desc *desc, const char*);
 int dscparse(struct desc  *m_desc);

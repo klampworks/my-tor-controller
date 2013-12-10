@@ -53,6 +53,10 @@ onion_key:
 		int len = strlen($1);
 		strncpy(m_desc->onion_key, $1, len);
 		rsa_index = m_desc->onion_key + len;
+
+		/* TODO find out why this does not always work, 
+			is index 188 being clobbered later?
+			it shouldn't be... */
 		rsa_index[188] = '\0';
 		}
 
@@ -65,6 +69,9 @@ onion_key:
 
 		strncpy(rsa_index, $2, len);
 		rsa_index += len;
+
+		/* Should not be needed. */
+		*rsa_index = '\0';
 	
 		}
 %%

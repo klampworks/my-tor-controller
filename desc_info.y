@@ -17,7 +17,7 @@ int dscparse(struct desc  *m_desc);
 %token <sval> IP;
 %token <sval> PLATFORM;
 %token <ival> UPTIME;
-%token <ival> bandwidth;
+%token <ival> BANDWIDTH;
 
 %parse-param {struct desc *m_desc}
 

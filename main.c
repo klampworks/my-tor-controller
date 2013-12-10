@@ -70,7 +70,10 @@ void print_desc(struct node *node) {
 	if (m_desc->platform)
 		printf("Platform = %s\n", m_desc->platform);
 
+
 	printf("Uptime = %d\n", m_desc->uptime);
+	printf("Bandwidth:\n\tmin = %d\n\tmax = %d\n\tavg = %d\n", 
+		m_desc->bw_min, m_desc->bw_max, m_desc->bw_avg);
 
 	release_desc(m_desc);
 }
@@ -98,7 +101,7 @@ void print_exit(struct node *node) {
 void print_info(struct node *node) {
 
 	printf("%s -- %s -- ", node->id, node->name);
-	print_ip(node);
+	print_desc(node);
 }
 
 void process_nodes(const char *msg, void(*fn)(struct node*)) {
@@ -204,6 +207,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (dump_full) {
+		printf("dskl;");
 		process_nodes("getinfo circuit-status\n", &print_info);
 
 	}

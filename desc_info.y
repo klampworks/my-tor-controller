@@ -83,7 +83,7 @@ char* append_buffer(char *buffer, const char *data, const char *buffer_start) {
 	int len = strlen(data);
 
 	/* Prevent buffer overflow. */
-	assert((rsa_index - buffer_start) + len < 189); 
+	assert((buffer - buffer_start) + len < 189); 
 
 	strncpy(buffer, data, len);
 	return buffer + len;

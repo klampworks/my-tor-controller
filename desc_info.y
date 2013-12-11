@@ -7,6 +7,7 @@
 void dscerror(struct desc *desc, const char*);
 int dscparse(struct desc  *m_desc);
 char* append_buffer(char *, const char *, const char*);
+char* begin_buffer(unsigned );
 
 char *rsa_index;
 
@@ -51,11 +52,8 @@ bandwidth:
 
 onion_key:
 	ONION_KEY KEY { 
-		m_desc->onion_key = malloc(189);
-		m_desc->onion_key[188] = '\0';
-		rsa_index = m_desc->onion_key;
-
-		rsa_index = append_buffer(rsa_index, $2, m_desc->onion_key);
+		m_desc->onion_key = begin_buffer(189);
+		rsa_index = append_buffer(m_desc->onion_key, $2, m_desc->onion_key);
 
 		}
 
@@ -65,6 +63,13 @@ onion_key:
 	
 		}
 %%
+
+char* begin_buffer(unsigned size) {
+
+	char *t = malloc(size);
+	t[size - 1] = '\0';
+	return t;
+}
 
 char* append_buffer(char *buffer, const char *data, const char *buffer_start) {
 

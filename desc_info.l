@@ -59,6 +59,8 @@ ntor-onion-key 467ox5E7Va
 <BW>[ ]?[0-9]+	{ dsclval.ival = atoi(dsctext); return BANDWIDTH; }
 <BW>\r\n	{ BEGIN(0);}
 
+
+^signing-key\r\n 	{ BEGIN(OK); return SIGNING_KEY; }
 ^onion-key\r\n 	{ BEGIN(OK); return ONION_KEY; }
 <OK>\-\-\-\--BEGIN\ RSA\ PUBLIC\ KEY\-\-\-\-\-\r\n ;
 <OK>[^-\r]+	{ dsclval.sval = strdup(dsctext); return KEY; }

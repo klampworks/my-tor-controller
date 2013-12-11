@@ -11,7 +11,7 @@ char* begin_buffer(unsigned );
 
 char *rsa_index;
 
-//dscdebug = 1;
+dscdebug = 1;
 %}
 
 %union {
@@ -31,7 +31,7 @@ char *rsa_index;
 %%
 
 start:
-	ip platform uptime bandwidth onion_key
+	ip platform uptime bandwidth onion_key signing_key
 
 ip:
 	IP { m_desc->ip_address = $1;  }

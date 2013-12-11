@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <alloca.h>
 #include <assert.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define MAXDATASIZE 1024
 
@@ -136,6 +138,22 @@ void process_nodes(const char *msg, void(*fn)(struct node*)) {
 	}
 }
 
+void drop_privileges() {
+
+	if (getuid())
+		/* We are not root. */	
+		return;
+
+	setgid(1000);
+	setuid(1000);
+
+	if (setuid(0)) {
+		puts("Managed to regain root.");
+	} else {
+		printf("Now running as %d\n", getuid());
+	}
+}
+
 int main(int argc, char *argv[]) {
 
 	if (argc < 2) {
@@ -185,6 +203,7 @@ int main(int argc, char *argv[]) {
 
 	}
 
+	drop_privileges();
 
 	if (filename) {
 

@@ -77,6 +77,10 @@ void print_desc(struct node *node) {
 
 	if (m_desc->onion_key)
 		printf("Onion key = %s\n", m_desc->onion_key);
+
+	if (m_desc->onion_key)
+		printf("Signing key = %s\n", m_desc->signing_key);
+
 	release_desc(m_desc);
 }
 
@@ -181,6 +185,7 @@ int main(int argc, char *argv[]) {
 
 	}
 
+
 	if (filename) {
 
 		//Get username and password from file.
@@ -229,6 +234,7 @@ int main(int argc, char *argv[]) {
 
 	if (dump_full) {
 		process_nodes("getinfo circuit-status\n", &print_info);
+
 
 	}
 	return 0;

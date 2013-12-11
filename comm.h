@@ -8,6 +8,7 @@
 		int uptime;
 		int bw_min, bw_max, bw_avg;
 		char *onion_key;
+		char *signing_key;
 
 	};
 

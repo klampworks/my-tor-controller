@@ -6,6 +6,7 @@
 
 void dscerror(struct desc *desc, const char*);
 int dscparse(struct desc  *m_desc);
+char* append_buffer(char *, const char *, const char*);
 
 char *rsa_index;
 
@@ -51,27 +52,33 @@ bandwidth:
 onion_key:
 	ONION_KEY KEY { 
 		m_desc->onion_key = malloc(189);
-		int len = strlen($2);
-		strncpy(m_desc->onion_key, $2, len);
-		rsa_index = m_desc->onion_key + len;
-
 		m_desc->onion_key[188] = '\0';
+		rsa_index = m_desc->onion_key;
+
+		rsa_index = append_buffer(rsa_index, $2, m_desc->onion_key);
+
 		}
 
 	| onion_key KEY {
 		
-		int len = strlen($2);
-
-		/* Most likely an attack. */
-		assert((rsa_index - m_desc->onion_key) + len < 189); 
-
-		strncpy(rsa_index, $2, len);
-		rsa_index += len;
+		rsa_index = append_buffer(rsa_index, $2, m_desc->onion_key);
 	
 		}
 %%
 
+char* append_buffer(char *buffer, const char *data, const char *buffer_start) {
+
+	int len = strlen(data);
+
+	/* Prevent buffer overflow. */
+	assert((rsa_index - buffer_start) + len < 189); 
+
+	strncpy(buffer, data, len);
+	return buffer + len;
+}
+
 void dscerror(struct desc *desc, const char *s) {
 	//printf("Email me teh errors %s\n", s);
 }
+
 

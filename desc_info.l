@@ -34,7 +34,7 @@ ntor-onion-key 467ox5E7Va
 %}
 
 %option noyywrap
-%x L1 L2 L3 UP JUNK1 JUNK2 JUNK3 BW OK
+%x L1 L2 L3 UP JUNK1 JUNK2 JUNK3 BW OK PLAT
 %%
 
 ^250\+[^\n]+	{ /* First line, contains information we already know. */ 
@@ -46,7 +46,8 @@ ntor-onion-key 467ox5E7Va
 <L2>([0-9]+\.){3}[0-9]+	{ dsclval.sval = strdup(dsctext); return IP; }
 <L2>[ ]		;
 <L2>\r\n	{ BEGIN(L3); }
-<L3>[^\n]+	{ dsclval.sval = strdup(dsctext); BEGIN(JUNK1); return PLATFORM; }
+<L3>^platform[ ] {BEGIN(PLAT); }
+<PLAT>[^\n]+	{ dsclval.sval = strdup(dsctext); BEGIN(JUNK1); return PLATFORM; }
 
 <JUNK1>\n[^\n]+\n { BEGIN(JUNK2); }
 <JUNK2>[^\n]+\n { BEGIN(JUNK3); }

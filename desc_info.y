@@ -19,9 +19,10 @@ char *rsa_index;
 
 %token <sval> IP;
 %token <sval> PLATFORM;
-%token <sval> ONION_KEY;
+%token <sval> KEY;
 %token <ival> UPTIME;
 %token <ival> BANDWIDTH;
+%token ONION_KEY;
 
 %parse-param {struct desc *m_desc}
 
@@ -48,10 +49,10 @@ bandwidth:
 					}
 
 onion_key:
-	ONION_KEY { 
+	ONION_KEY KEY { 
 		m_desc->onion_key = malloc(189);
-		int len = strlen($1);
-		strncpy(m_desc->onion_key, $1, len);
+		int len = strlen($2);
+		strncpy(m_desc->onion_key, $2, len);
 		rsa_index = m_desc->onion_key + len;
 
 		/* TODO find out why this does not always work, 
@@ -60,7 +61,7 @@ onion_key:
 		rsa_index[188] = '\0';
 		}
 
-	| onion_key ONION_KEY {
+	| onion_key KEY {
 		
 		int len = strlen($2);
 

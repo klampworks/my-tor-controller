@@ -210,5 +210,11 @@ void release_desc(struct desc *m_desc) {
 	if (m_desc->platform)
 		free(m_desc->platform);
 
+	if (m_desc->onion_key)
+		free(m_desc->onion_key);
+
+	if (m_desc->signing_key)
+		free(m_desc->signing_key);
+
 	free(m_desc);
 }

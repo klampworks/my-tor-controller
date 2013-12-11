@@ -24,7 +24,7 @@ char *rsa_index;
 %token <sval> KEY;
 %token <ival> UPTIME;
 %token <ival> BANDWIDTH;
-%token ONION_KEY;
+%token ONION_KEY SIGNING_KEY;
 
 %parse-param {struct desc *m_desc}
 
@@ -54,13 +54,20 @@ onion_key:
 	ONION_KEY KEY { 
 		m_desc->onion_key = begin_buffer(189);
 		rsa_index = append_buffer(m_desc->onion_key, $2, m_desc->onion_key);
-
 		}
 
 	| onion_key KEY {
-		
 		rsa_index = append_buffer(rsa_index, $2, m_desc->onion_key);
-	
+		}
+
+signing_key:
+	SIGNING_KEY KEY { 
+		m_desc->signing_key = begin_buffer(189);
+		rsa_index = append_buffer(m_desc->signing_key, $2, m_desc->signing_key);
+		}
+
+	| signing_key KEY {
+		rsa_index = append_buffer(rsa_index, $2, m_desc->signing_key);
 		}
 %%
 

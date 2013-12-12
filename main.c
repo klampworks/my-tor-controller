@@ -33,6 +33,20 @@ struct or_info {
 	char *ip;
 };
 
+char* prepare_send_buffer(const char* command, char *msg) {
+
+	int command_len = strlen(command);
+	int total_len = command_len + strlen(msg) + 3;
+
+	char *buf = malloc(total_len);
+	strcpy(buf, command);
+
+	strcpy(buf+command_len, msg);
+	strcpy(buf+total_len - 3, "\r\n");
+
+	return buf;
+}
+
 struct desc* get_desc(struct node *node) {
 
 	/* Prepare template text that will not change. */
@@ -108,7 +122,7 @@ void print_exit(struct node *node) {
 
 void print_info(struct node *node) {
 
-	printf("%s -- %s -- ", node->id, node->name);
+	printf("%s -- %s\n", node->id, node->name);
 	print_desc(node);
 }
 
@@ -156,6 +170,11 @@ void drop_privileges() {
 
 int main(int argc, char *argv[]) {
 
+	char *mi = prepare_send_buffer("getinfo desc/id/", "abcd");
+
+	for (char *i = mi; *i; i++)
+		printf("<%x>\n", *i);
+	
 	if (argc < 2) {
 		printf("Usage: %s -p <control port> -a <password> (-n|-d)\n"
 			"-n New Tor circuit.\n"

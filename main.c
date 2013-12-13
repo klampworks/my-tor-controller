@@ -53,6 +53,8 @@ char* send_buffer(const char *command, const char *msg) {
 
 char* get_country(const char *ip) {
 
+	if (!ip) return NULL;
+
 	char *res = send_buffer("getinfo ip-to-country/", ip);
 
 	char *st = strrchr(res, '=');
@@ -62,7 +64,7 @@ char* get_country(const char *ip) {
 	strncpy(country, st, 2);
 	country[2] = '\0';
 
-	puts(country);
+	return country;
 }
 
 struct desc* get_desc(struct node *node) {
@@ -73,14 +75,18 @@ struct desc* get_desc(struct node *node) {
 	char *buf = send_buffer("getinfo desc/id/", node->id);
 
 	/* Parse out the desc data. */
-	return parse_desc(buf);
+	struct desc *desc =  parse_desc(buf);
+
+	desc->country = get_country(desc->ip_address);
+	
+	return desc;
 }
 
 void print_desc(struct node *node) {
 
 	struct desc *m_desc = get_desc(node);
 
-	if (!m_desc)
+	If (!m_desc)
 		return;
 
 	if (m_desc->ip_address)

@@ -33,41 +33,36 @@ struct or_info {
 	char *ip;
 };
 
-char* prepare_send_buffer(const char* command, char *msg) {
+char* prepare_send_buffer(const char* command, const char *msg) {
+
+
+	return buf;
+}
+
+char* send_buffer(const char *command, const char *msg) {
 
 	int command_len = strlen(command);
 	int total_len = command_len + strlen(msg) + 3;
 
-	char *buf = malloc(total_len);
-	strcpy(buf, command);
+	char *to = alloca(total_len);
+	strcpy(to, command);
 
-	strcpy(buf+command_len, msg);
-	strcpy(buf+total_len - 3, "\r\n");
+	strcpy(to+command_len, msg);
+	strcpy(to+total_len - 3, "\r\n");
+
+	/* Send the query to the control port. */
+	my_send(s, to);
+	my_recv(s, buf);
 
 	return buf;
 }
 
 struct desc* get_desc(struct node *node) {
 
-	/* Prepare template text that will not change. */
-	static char togo[17+41+2];
-	static char *togo_i = togo+16;
-
-	/* Is there a way to initialise a char array with an initial value
-	 * and have it still read/ write? */
-	static int first = 1;
-	if (first) { 
-		strncpy(togo, "getinfo desc/id/", 16);
-		first = 0;
-	}
-
-	/* Copy the ID into the template buffer. */
 	assert(strlen(node->id) == 41);
-	strcpy(togo_i, node->id);
 
-	/* Send the query to the control port. */
-	my_send(s, togo);
-	my_recv(s, buf);
+	/* Buf is global. */
+	char *buf = send_buffer("getinfo desc/id/", node->id);
 
 	/* Parse out the desc data. */
 	return parse_desc(buf);

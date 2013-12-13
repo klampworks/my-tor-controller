@@ -216,5 +216,8 @@ void release_desc(struct desc *m_desc) {
 	if (m_desc->signing_key)
 		free(m_desc->signing_key);
 
+	if (m_desc->country)
+		free(m_desc->country);
+
 	free(m_desc);
 }

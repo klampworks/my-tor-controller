@@ -54,7 +54,15 @@ char* send_buffer(const char *command, const char *msg) {
 char* get_country(const char *ip) {
 
 	char *res = send_buffer("getinfo ip-to-country/", ip);
-	puts(res);
+
+	char *st = strrchr(res, '=');
+	if (!st++) return NULL;
+
+	char *country = malloc(3);
+	strncpy(country, st, 2);
+	country[2] = '\0';
+
+	puts(country);
 }
 
 struct desc* get_desc(struct node *node) {

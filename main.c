@@ -33,12 +33,6 @@ struct or_info {
 	char *ip;
 };
 
-char* prepare_send_buffer(const char* command, const char *msg) {
-
-
-	return buf;
-}
-
 char* send_buffer(const char *command, const char *msg) {
 
 	int command_len = strlen(command);
@@ -165,10 +159,7 @@ void drop_privileges() {
 
 int main(int argc, char *argv[]) {
 
-	char *mi = prepare_send_buffer("getinfo desc/id/", "abcd");
 
-	for (char *i = mi; *i; i++)
-		printf("<%x>\n", *i);
 	
 	if (argc < 2) {
 		printf("Usage: %s -p <control port> -a <password> (-n|-d)\n"

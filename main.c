@@ -51,6 +51,12 @@ char* send_buffer(const char *command, const char *msg) {
 	return buf;
 }
 
+char* get_country(const char *ip) {
+
+	char *res = send_buffer("getinfo ip-to-country/", ip);
+	puts(res);
+}
+
 struct desc* get_desc(struct node *node) {
 
 	assert(strlen(node->id) == 41);
@@ -87,6 +93,17 @@ void print_desc(struct node *node) {
 		printf("Signing key = %s\n", m_desc->signing_key);
 
 	release_desc(m_desc);
+}
+
+void print_country(struct node *node) {
+
+	struct desc *m_desc = get_desc(node);
+
+	if (m_desc && m_desc->ip_address)
+			get_country(m_desc->ip_address);
+
+	release_desc(m_desc);
+
 }
 
 void print_ip(struct node *node) {
@@ -158,8 +175,6 @@ void drop_privileges() {
 }
 
 int main(int argc, char *argv[]) {
-
-
 	
 	if (argc < 2) {
 		printf("Usage: %s -p <control port> -a <password> (-n|-d)\n"
@@ -170,7 +185,7 @@ int main(int argc, char *argv[]) {
 
 	short port = -1;
 	char *password = NULL;
-	int new_circuit = 0, dump_entry = 0, dump_exit = 0, dump_full = 0;
+	int new_circuit = 0, dump_entry = 0, dump_exit = 0, dump_full = 0, dump_country = 0;
 	char *filename = NULL;
 
 	for (int i = 1; i < argc; i++) {
@@ -199,6 +214,9 @@ int main(int argc, char *argv[]) {
 				continue;
 			case 'P':
 				filename = ++i < argc ? argv[i] : (char*)error("Not enough arguments.");
+				continue;
+			case 'c':
+				dump_country = 1;
 				continue;
 			}
 
@@ -258,9 +276,13 @@ int main(int argc, char *argv[]) {
 
 	if (dump_full) {
 		process_nodes("getinfo circuit-status\n", &print_info);
-
-
 	}
+
+	if (dump_country) {
+		process_nodes("getinfo circuit-status\n", &print_country);
+	}
+
+
 	return 0;
 }
 
